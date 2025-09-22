@@ -1,18 +1,20 @@
-# AI Interview Agent
+# Cloudflare AI Interviewer
 
 **🚀 Live Demo:** https://cf_ai_interview_agent.interviewer.workers.dev  
 **📁 Repository:** https://github.com/saabiqsaha/cf_ai_interview_agent
 
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange?style=flat&logo=cloudflare)](https://workers.cloudflare.com)
 
-Real-time AI interviewer with personalized questions, instant feedback, and performance scoring.
+This project is a simple but powerful AI agent that conducts automated behavioral interviews, built entirely on the Cloudlfare AI stack.
 
-## Features
+---
+## ✅ Core Requirements
 
-- **Dynamic Questions** - Role-specific questions based on position and resume
-- **Real-time Feedback** - Instant scoring and improvement suggestions  
-- **Session Memory** - Maintains context throughout interview
-- **Performance Reports** - Comprehensive analysis and recommendations
+* **🧠 LLM:** Uses **Cloudflare Workers AI** to run the `@cf/meta/llama-3-8b-instruct` model.
+* **⚙️ Workflow:** A central **Cloudflare Worker** acts as the router and main entry point.
+* **💬 User Input:** The UI is a static HTML page served via **Cloudflare Pages**.
+* **💾 Memory/State:** Conversation history is managed by a **Durable Object** for stateful, contextual interviews.
+---
 
 ## Screenshots
 
