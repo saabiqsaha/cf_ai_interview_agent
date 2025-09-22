@@ -1,8 +1,19 @@
-# CF workers AI Behavioral Screener
+# cf_ai_interview_agent
 
-**Live Demo URL:** [https://cf_ai_interview_agent.interviewer.workers.dev](https://cf_ai_interview_agent.interviewer.workers.dev)
+**Live demo:** https://cf_ai_interview_agent.interviewer.workers.dev  
+**Repo:** https://github.com/saabiqsaha/cf_ai_interview_agent
 
-This project is an AI-powered agent that conducts automated behavioral interviews. It's built entirely on the Cloudflare stack to fulfill the requirements of the SWE Intern AI assignment.
+A tiny **Cloudflare-native interview agent** that asks one question at a time, scores each answer, gives feedback, and keeps session memory.
+
+## Stack (why it’s Cloudflare-y)
+- **Workers** – request routing + API
+- **Durable Object** – per-session memory (turn history, current question, score)
+- **Workflow/Function** – lightweight grading pass (score + feedback)
+- **UI** – static Pages (chat)
+- **LLM** – external (Google Gemini) called from the Worker
+- **PROMPTS.md** – all prompts and versions (transparency per assignment)
+
+
 
 ---
 
