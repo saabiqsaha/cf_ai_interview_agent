@@ -1,55 +1,48 @@
-# AI Behavioral Screener - Cloudflare SWE Intern Assignment
+# 🤖 AI Behavioral Screener (Cloudflare SWE Intern Assignment)
 
 **Live Demo URL:** [https://cf_ai_interview_agent.interviewer.workers.dev](https://cf_ai_interview_agent.interviewer.workers.dev)
 
+This project is an AI-powered agent that conducts automated behavioral interviews. It's built entirely on the Cloudflare stack to fulfill the requirements of the SWE Intern AI assignment.
+
 ---
 
-## Project Overview
+### ✅ Core Requirements Met
 
-This project is an AI-powered behavioral screening agent built to fulfill the requirements of the Cloudflare Software Engineer Intern AI assignment. It provides an interactive chat interface where a user can select a candidate profile and undergo a simulated behavioral interview.
+* **🧠 LLM:** Uses **Cloudflare Workers AI** to run the `@cf/meta/llama-3-8b-instruct` model.
+* **⚙️ Workflow:** A central **Cloudflare Worker** acts as the router and main entry point.
+* **💬 User Input:** The UI is a static HTML page served via **Cloudflare Pages**.
+* **💾 Memory/State:** Conversation history is managed by a **Durable Object** for stateful, contextual interviews.
 
-The AI agent asks a series of five insightful questions based on the STAR method to assess a candidate's soft skills in areas like teamwork, problem-solving, and handling workplace challenges. Upon completion, the agent provides a concise summary of the candidate's performance.
+---
 
-This application is built entirely on the Cloudflare developer platform, demonstrating a practical understanding of serverless architecture and AI integration.
+### 📸 Application Screenshots
 
-## Core Technical Requirements Met
+*(Placeholder: Replace this text and the link with a screenshot of your app's landing page)*
+![Landing Page](https://i.imgur.com/your-screenshot-url-1.png)
 
-This project successfully implements all components specified in the assignment:
+*(Placeholder: Replace this text and the link with a screenshot of an in-progress interview)*
+![Interview in Progress](https://i.imgur.com/your-screenshot-url-2.png)
 
-* **LLM (Large Language Model):**
-    * Utilizes **Cloudflare Workers AI** to run the `@cf/meta/llama-3-8b-instruct` model for generating intelligent and context-aware interview questions and summaries.
+---
 
-* **Workflow / Coordination:**
-    * A primary **Cloudflare Worker** (`src/index.ts`) acts as the main entry point and router, directing API traffic and serving the frontend application.
+### 🚀 How to Run Locally
 
-* **User Input:**
-    * The user interface is a static `index.html` file served via **Cloudflare Pages** (using the `assets` binding), providing a clean and responsive chat experience.
-
-* **Memory / State:**
-    * Each interview's conversation history is managed by a **Durable Object** (`src/InterviewSession.ts`). This provides a stateful, persistent memory for the AI, allowing it to remember the context of the entire conversation from start to finish.
-
-## How to Run Locally
-
-1.  **Clone the repository:**
+1.  **Clone & Install:**
     ```bash
     git clone [https://github.com/saabiqsaha/cf_ai_interview_agent.git](https://github.com/saabiqsaha/cf_ai_interview_agent.git)
-    ```
-2.  **Navigate into the project directory:**
-    ```bash
     cd cf_ai_interview_agent
-    ```
-3.  **Install dependencies:**
-    ```bash
     npm install
     ```
-4.  **Run the local development server:**
+2.  **Run Locally:**
     ```bash
     wrangler dev --local
     ```
-5.  Open `http://localhost:8787` in your browser.
+3.  Open `http://localhost:8787` in your browser.
 
-## Developer
+---
+
+### 👨‍💻 Developer
 
 * **Mohammed Abdulai**
-    * **LinkedIn:** [https://www.linkedin.com/in/mohammed-saabiq-saha-abdulai-099b00257/](https://www.linkedin.com/in/mohammed-saabiq-saha-abdulai-099b00257/)
-    * **GitHub:** [https://github.com/saabiqsaha](https://github.com/saabiqsaha)
+    * **LinkedIn:** [linkedin.com/in/mohammed-saabiq-saha-abdulai](https://www.linkedin.com/in/mohammed-saabiq-saha-abdulai-099b00257/)
+    * **GitHub:** [github.com/saabiqsaha](https://github.com/saabiqsaha)
