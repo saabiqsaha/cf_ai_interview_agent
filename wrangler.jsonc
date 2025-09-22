@@ -24,5 +24,10 @@
 				"InterviewSession"
 			]
 		}
-	]
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./public"
+	}
 }
+

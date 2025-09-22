@@ -1,34 +1,40 @@
 // We need to import the Durable Object class we just created.
 import { InterviewSession } from './InterviewSession';
 
-// This defines the "environment" that Cloudflare provides to our Worker.
-// It's how our code gets access to the Durable Object binding we configured in wrangler.jsonc.
+// This defines the "bindings" that Cloudflare makes available to our Worker.
+// We've added ASSETS, which is our connection to the 'public' folder.
 export interface Env {
 	INTERVIEW_SESSION: DurableObjectNamespace;
-	AI: any; // This binding is for the Workers AI service.
+	AI: any;
+	ASSETS: Fetcher;
 }
 
 export default {
-	// The `fetch` method is the main entry point for all requests coming to our Worker.
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		// For this app, we want every user to get a fresh, new interview session.
-		// So, we create a new, random, unique ID for every single request that comes in.
-		const id = env.INTERVIEW_SESSION.newUniqueId();
+		const url = new URL(request.url);
 
-		// This is the magic part. We use the unique ID to get a "stub" for our
-		// InterviewSession Durable Object. A stub is like a pointer or a remote control
-		// to the actual object instance.
-		const stub = env.INTERVIEW_SESSION.get(id);
+		// If the request is for an API endpoint, forward it to the Durable Object.
+		if (url.pathname.startsWith('/start') || url.pathname.startsWith('/answer') || url.pathname.startsWith('/summary')) {
+			// Every interview needs a unique ID. We'll create a new one for each conversation.
+			// Using a simple random ID is fine for this project.
+			const interviewId = crypto.randomUUID();
 
-		// Now, we simply forward the user's original request (e.g., to '/start')
-		// to that specific Durable Object instance and return whatever it sends back.
-		// The main worker doesn't need to know anything about the interview logic itself.
-		return stub.fetch(request);
+			// Get the specific Durable Object instance for this interview.
+			const id = env.INTERVIEW_SESSION.idFromString(interviewId);
+			const stub = env.INTERVIEW_SESSION.get(id);
+
+			// Forward the request to the Durable Object.
+			return stub.fetch(request);
+		}
+
+		// Otherwise, it's a request for a static asset (like our index.html).
+		// Let the ASSETS binding handle serving the file from the `public` directory.
+		return env.ASSETS.fetch(request);
 	},
 };
 
 // CRITICAL: We also need to export the Durable Object class from our main entrypoint file.
 // This tells the Cloudflare runtime where to find the code for the "InterviewSession" class
-// that we referenced by name in our wrangler.jsonc file. Without this, it won't work.
-export { InterviewSession };
+// that we referenced in our wrangler.jsonc file.
+export { InterviewSession } from './InterviewSession';
 
