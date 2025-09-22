@@ -1,4 +1,4 @@
-# 🤖 AI Behavioral Screener (Cloudflare SWE Intern Assignment)
+# CF workers AI Behavioral Screener
 
 **Live Demo URL:** [https://cf_ai_interview_agent.interviewer.workers.dev](https://cf_ai_interview_agent.interviewer.workers.dev)
 
@@ -6,7 +6,7 @@ This project is an AI-powered agent that conducts automated behavioral interview
 
 ---
 
-### ✅ Core Requirements Met
+### ✅ Core Requirements
 
 * **🧠 LLM:** Uses **Cloudflare Workers AI** to run the `@cf/meta/llama-3-8b-instruct` model.
 * **⚙️ Workflow:** A central **Cloudflare Worker** acts as the router and main entry point.
