@@ -5,16 +5,6 @@
 
 A tiny **Cloudflare-native interview agent** that asks one question at a time, scores each answer, gives feedback, and keeps session memory.
 
-## Stack (why it’s Cloudflare-y)
-- **Workers** – request routing + API
-- **Durable Object** – per-session memory (turn history, current question, score)
-- **Workflow/Function** – lightweight grading pass (score + feedback)
-- **UI** – static Pages (chat)
-- **LLM** – external (Google Gemini) called from the Worker
-- **PROMPTS.md** – all prompts and versions (transparency per assignment)
-
-
-
 ---
 
 ### ✅ Core Requirements
