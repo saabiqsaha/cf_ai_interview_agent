@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudHire AI Interviewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        #chat-container::-webkit-scrollbar { width: 4px; }
+        #chat-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        #chat-container::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
+        #chat-container::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div id="app-container" class="w-full max-w-2xl h-full md:h-[90vh] md:max-h-[700px] bg-white rounded-lg shadow-xl flex flex-col transition-all duration-300">
+
+        <!-- Initial Screen -->
+        <div id="initial-screen" class="flex flex-col items-center justify-center text-center p-8 h-full">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">CloudHire AI</h1>
+            <p class="text-gray-600 mb-6">Your AI-powered technical screening assistant.</p>
+            <div class="w-full max-w-sm">
+                <label for="job-role" class="block text-sm font-medium text-gray-700 mb-2">Select a role to be interviewed for:</label>
+                <select id="job-role" name="job-role" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>Software Engineer</option>
+                    <option>Frontend Engineer</option>
+                    <option>Backend Engineer</option>
+                    <option>Product Manager</option>
+                    <option>Data Scientist</option>
+                </select>
+                <button id="start-btn" class="mt-6 w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
+                    Start Interview
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Screen -->
+        <div id="chat-screen" class="hidden flex-col h-full">
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800">Interview in Progress</h2>
+                <p class="text-sm text-gray-500" id="interviewing-for">Role: Frontend Engineer</p>
+            </div>
+            <div id="chat-container" class="flex-1 p-6 overflow-y-auto space-y-6">
+                <!-- Chat messages will be appended here -->
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <div class="relative">
+                    <textarea id="chat-input" placeholder="Type your answer..." class="w-full p-3 pr-20 rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none" rows="1"></textarea>
+                    <button id="send-btn" class="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 rounded-full hover:bg-indigo-700 disabled:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Screen -->
+        <div id="summary-screen" class="hidden flex-col items-center justify-center text-center p-8 h-full">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Interview Complete!</h1>
+            <p class="text-gray-600 mb-6">Here is a summary of your performance:</p>
+            <div id="summary-content" class="w-full max-w-lg text-left bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-y-auto max-h-80">
+                <!-- Summary content will go here -->
+            </div>
+            <button id="restart-btn" class="mt-8 w-full max-w-sm bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-300">
+                Start New Interview
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        const initialScreen = document.getElementById('initial-screen');
+        const chatScreen = document.getElementById('chat-screen');
+        const summaryScreen = document.getElementById('summary-screen');
+        const startBtn = document.getElementById('start-btn');
+        const sendBtn = document.getElementById('send-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const jobRoleSelect = document.getElementById('job-role');
+        const interviewingFor = document.getElementById('interviewing-for');
+        const chatContainer = document.getElementById('chat-container');
+        const chatInput = document.getElementById('chat-input');
+        const summaryContent = document.getElementById('summary-content');
+
+        // --- State ---
+        let interviewId = null;
+        let questionCount = 0;
+        const MAX_QUESTIONS = 5;
+
+        // --- Functions ---
+
+        function showScreen(screen) {
+            initialScreen.classList.add('hidden');
+            chatScreen.classList.add('hidden');
+            summaryScreen.classList.add('hidden');
+            screen.classList.remove('hidden');
+            screen.classList.add('flex');
+        }
+
+        function addMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            const formattedText = text.replace(/\n/g, '<br>');
+
+            if (sender === 'ai') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="bg-indigo-100 text-indigo-700 p-2 rounded-full text-sm font-semibold">AI</div>
+                        <div class="bg-gray-200 text-gray-800 p-4 rounded-lg max-w-[85%]">${formattedText}</div>
+                    </div>`;
+            } else { // user
+                messageDiv.innerHTML = `
+                    <div class="flex items-start gap-3 justify-end">
+                        <div class="bg-blue-500 text-white p-4 rounded-lg max-w-[85%]">${formattedText}</div>
+                        <div class="bg-gray-200 text-gray-700 p-2 rounded-full text-sm font-semibold">You</div>
+                    </div>`;
+            }
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function setLoading(isLoading) {
+            sendBtn.disabled = isLoading;
+            chatInput.disabled = isLoading;
+            if (isLoading) {
+                sendBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                chatInput.placeholder = "AI is thinking...";
+            } else {
+                sendBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                chatInput.placeholder = "Type your answer...";
+            }
+        }
+        
+        // --- Event Listeners ---
+
+        startBtn.addEventListener('click', async () => {
+            const selectedRole = jobRoleSelect.value;
+            interviewingFor.textContent = `Role: ${selectedRole}`;
+            showScreen(chatScreen);
+            addMessage('ai', 'Initializing interview...');
+            setLoading(true);
+
+            try {
+                const response = await fetch('/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobRole: selectedRole })
+                });
+                const data = await response.json();
+                
+                // Extract the unique interview ID from the response headers
+                // This is a simplified approach; in a real app, the server would return this in the body or a header
+                // For this project, we'll get a new ID on each page load.
+                interviewId = response.headers.get('cf-ray'); // Using cf-ray as a pseudo-unique ID for the session
+
+                chatContainer.innerHTML = ''; // Clear "Initializing" message
+                addMessage('ai', data.question);
+                questionCount = 1;
+            } catch(e) {
+                addMessage('ai', 'Sorry, something went wrong. Please try refreshing the page.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        async function handleSendAnswer() {
+            const answer = chatInput.value.trim();
+            if (!answer) return;
+
+            addMessage('user', answer);
+            chatInput.value = '';
+            setLoading(true);
+
+            if (questionCount >= MAX_QUESTIONS) {
+                // Get summary
+                try {
+                    const response = await fetch('/summary', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+                    const data = await response.json();
+                    summaryContent.innerHTML = data.summary.replace(/\n/g, '<br>');
+                    showScreen(summaryScreen);
+                } catch(e) {
+                    addMessage('ai', 'Could not retrieve summary. Please refresh to start over.');
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                // Get next question
+                 try {
+                    const response = await fetch('/answer', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ answer })
+                    });
+                    const data = await response.json();
+                    addMessage('ai', data.question);
+                    questionCount++;
+                } catch(e) {
+                     addMessage('ai', 'Sorry, I had trouble processing that. Please try again.');
+                } finally {
+                    setLoading(false);
+                }
+            }
+        }
+
+        sendBtn.addEventListener('click', handleSendAnswer);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendAnswer();
+            }
+        });
+
+        restartBtn.addEventListener('click', () => {
+            questionCount = 0;
+            interviewId = null;
+            chatContainer.innerHTML = '';
+            showScreen(initialScreen);
+        });
+
+    </script>
+</body>
+</html>
+
