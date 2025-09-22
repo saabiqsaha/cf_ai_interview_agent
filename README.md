@@ -25,11 +25,6 @@ This project is a simple but powerful AI agent that conducts automated behaviora
 
 </div>
 
-## Tech Stack
-
-🧠 **LLM:** Cloudflare Workers AI  
-⚙️ **Backend:** Cloudflare Workers + Durable Objects  
-💬 **Frontend:** HTML/JS via Cloudflare Pages
 
 ## Quick Start
 
