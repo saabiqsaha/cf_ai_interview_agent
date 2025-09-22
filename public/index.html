@@ -1,75 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Behavioral Screener | Cloudflare Assignment</title>
+    <title>Behavioral AI Screener</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         #chat-container::-webkit-scrollbar { width: 4px; }
-        #chat-container::-webkit-scrollbar-track { background: #f8fafc; }
-        #chat-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
-        #chat-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .gradient-bg {
-            background-color: #f3f4f6;
-            background-image: radial-gradient(at 0% 0%, hsla(217, 71%, 54%, 0.1) 0px, transparent 50%),
-                              radial-gradient(at 100% 0%, hsla(28, 93%, 58%, 0.1) 0px, transparent 50%);
+        #chat-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 2px;}
+        #chat-container::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
+        #chat-container::-webkit-scrollbar-thumb:hover { background: #555; }
+        .details-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem 1rem;
+            align-items: center;
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen gradient-bg">
+<body class="bg-gray-100 flex items-center justify-center h-full p-4">
 
-    <div id="app-container" class="w-full max-w-2xl h-full md:h-[95vh] md:max-h-[800px] bg-white rounded-lg shadow-2xl flex flex-col transition-all duration-300 overflow-hidden border border-gray-200">
+    <div id="app-container" class="w-full max-w-2xl h-full md:h-[90vh] md:max-h-[800px] bg-white rounded-lg shadow-xl flex flex-col transition-all duration-300 overflow-hidden">
 
         <!-- Initial Screen -->
-        <div id="initial-screen" class="flex flex-col text-center h-full">
+        <div id="initial-screen" class="flex flex-col text-center p-6 sm:p-8 h-full">
             <!-- Header Section -->
-            <div class="p-6 border-b border-gray-200 bg-gray-50">
-                <div class="flex justify-center items-center gap-4 mb-4">
-                    <img 
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cloudflare_Logo.svg/1024px-Cloudflare_Logo.svg.png" 
-                        onerror="this.style.display='none'"
-                        alt="Cloudflare Logo" 
-                        class="h-8">
-                    <h1 class="text-2xl font-bold text-gray-800">SWE Intern AI Assignment</h1>
+            <div class="w-full pb-6 border-b border-gray-200">
+                <div class="flex items-center justify-center gap-2 mb-3">
+                    <span class="text-sm text-gray-500">Powered by</span>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cloudflare_Logo.svg/1024px-Cloudflare_Logo.svg.png?20220519022010" alt="Cloudflare Logo" class="h-5">
+                    <span class="font-semibold text-gray-600"></span>
                 </div>
-                <div class="text-sm text-gray-500 space-y-1">
-                    <p><span class="font-semibold">Developer:</span> Mohammed Abdulai | <a href="https://www.linkedin.com/in/mohammed-saabiq-saha-abdulai-099b00257/" target="_blank" class="text-indigo-600 hover:underline">LinkedIn</a></p>
-                    <p><span class="font-semibold">Tech Stack:</span> Cloudflare Workers, Durable Objects for State, Workers AI</p>
-                    <p><span class="font-semibold">AI Model:</span> Meta Llama 3 (`@cf/meta/llama-3-8b-instruct`)</p>
+                <div class="details-grid w-full max-w-md mx-auto text-sm text-left">
+                    <span class="font-semibold text-gray-600 justify-self-end">Project:</span>
+                    <span class="text-gray-800">AI Assignment for SWE Intern Role</span>
+
+                    <span class="font-semibold text-gray-600 justify-self-end">Developer:</span>
+                    <span class="text-gray-800">Mohammed Abdulai</span>
+
+                    <span class="font-semibold text-gray-600 justify-self-end">LinkedIn:</span>
+                    <a href="https://www.linkedin.com/in/mohammed-saabiq-saha-abdulai-099b00257/" target="_blank" class="text-indigo-600 hover:underline">linkedin.com/in/mohammed-saabiq-saha-abdulai...</a>
+
+                    <span class="font-semibold text-gray-600 justify-self-end">GitHub:</span>
+                    <a href="https://github.com/saabiqsaha/cf_ai_interview_agent" target="_blank" class="text-indigo-600 hover:underline">github.com/saabiqsaha/cf_ai_interview_agent</a>
+
+                    <span class="font-semibold text-gray-600 justify-self-end">AI Model:</span>
+                    <span class="text-gray-800">Llama 3 (`@cf/meta/llama-3-8b-instruct`)</span>
                 </div>
             </div>
-            
+
             <!-- Main Content -->
-            <div class="flex-1 flex flex-col items-center justify-center p-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Behavioral AI Screener</h2>
-                <p class="text-gray-600 mb-8 max-w-md">An AI agent that conducts initial behavioral interviews to assess a candidate's soft skills and past experiences.</p>
+            <div class="flex-grow flex flex-col items-center justify-center">
+                 <!-- Title is smaller now -->
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Behavioral AI Screener</h1>
+                 <!-- Subtitle is bigger and clearer now -->
+                <p class="text-base text-gray-600 mb-8">An AI agent for conducting initial behavioral interviews.</p>
                 <div class="w-full max-w-sm">
-                    <label for="job-role" class="block text-sm font-medium text-gray-700 mb-2">Select a candidate profile to screen:</label>
-                    <select id="job-role" name="job-role" class="mt-1 block w-full pl-3 pr-10 py-2.5 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <label for="job-role" class="block text-sm font-medium text-gray-700 mb-2">Select a general candidate profile:</label>
+                    <select id="job-role" name="job-role" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                         <option>Entry-Level Candidate</option>
                         <option>Mid-Level Professional</option>
                         <option>Leadership Role</option>
                     </select>
-                    <button id="start-btn" class="mt-6 w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300 shadow-sm">
+                    <button id="start-btn" class="mt-6 w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
                         Start Interview
                     </button>
                 </div>
             </div>
         </div>
 
+
         <!-- Chat Screen -->
         <div id="chat-screen" class="hidden flex-col h-full">
-            <div class="p-4 border-b border-gray-200 bg-gray-50">
+            <div class="p-4 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Behavioral Screen in Progress</h2>
                 <p class="text-sm text-gray-500" id="interviewing-for">Profile: Entry-Level Candidate</p>
             </div>
-            <div id="chat-container" class="flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50">
+            <div id="chat-container" class="flex-1 p-6 overflow-y-auto space-y-6">
                 <!-- Chat messages will be appended here -->
             </div>
-            <div class="p-4 border-t border-gray-200 bg-white">
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
                 <div class="relative">
                     <textarea id="chat-input" placeholder="Type your answer..." class="w-full p-3 pr-20 rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none" rows="1"></textarea>
                     <button id="send-btn" class="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 rounded-full hover:bg-indigo-700 disabled:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
@@ -80,10 +92,10 @@
         </div>
 
         <!-- Summary Screen -->
-        <div id="summary-screen" class="hidden flex-col items-center justify-center text-center p-8 h-full bg-gray-50">
+        <div id="summary-screen" class="hidden flex-col items-center justify-center text-center p-8 h-full">
             <h1 class="text-3xl font-bold text-gray-800 mb-4">Interview Complete!</h1>
             <p class="text-gray-600 mb-6">Here is a summary of the candidate's responses:</p>
-            <div id="summary-content" class="w-full max-w-lg text-left bg-white p-6 rounded-lg border border-gray-200 overflow-y-auto max-h-80">
+            <div id="summary-content" class="w-full max-w-lg text-left bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-y-auto max-h-80">
                 <!-- Summary content will go here -->
             </div>
             <button id="restart-btn" class="mt-8 w-full max-w-sm bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-300">
@@ -128,12 +140,12 @@
                 messageDiv.innerHTML = `
                     <div class="flex items-start gap-3">
                         <div class="bg-indigo-100 text-indigo-700 p-2 rounded-full text-sm font-semibold flex-shrink-0 w-8 h-8 flex items-center justify-center">AI</div>
-                        <div class="bg-white text-gray-800 p-4 rounded-lg max-w-[85%] shadow-sm border border-gray-200">${formattedText}</div>
+                        <div class="bg-gray-200 text-gray-800 p-4 rounded-lg max-w-[85%]">${formattedText}</div>
                     </div>`;
             } else { // user
                 messageDiv.innerHTML = `
                     <div class="flex items-start gap-3 justify-end">
-                        <div class="bg-indigo-600 text-white p-4 rounded-lg max-w-[85%] shadow-sm">${formattedText}</div>
+                        <div class="bg-blue-500 text-white p-4 rounded-lg max-w-[85%]">${formattedText}</div>
                         <div class="bg-gray-200 text-gray-700 p-2 rounded-full text-sm font-semibold flex-shrink-0 w-8 h-8 flex items-center justify-center">You</div>
                     </div>`;
             }
@@ -231,7 +243,6 @@
             }
         });
         
-        // Auto-resize textarea
         chatInput.addEventListener('input', () => {
             chatInput.style.height = 'auto';
             chatInput.style.height = (chatInput.scrollHeight) + 'px';
